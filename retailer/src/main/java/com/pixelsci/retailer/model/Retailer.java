@@ -15,15 +15,15 @@ import java.util.List;
 public class Retailer {
 
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
+    @GeneratedValue( strategy = GenerationType.AUTO)
     private Long id;
     @Column(name = "owner_name", nullable = false)
     private String owerName;
     @Column(name = "address" , nullable = false)
     private String address;
-    @Column(name= "email" , nullable = false)
+    @Column(name= "email" , nullable = false,unique = true)
     private String email;
-    @Column(name="phone",nullable = false)
+    @Column(name="phone",nullable = false,unique = true)
     private String phone;
 
     @OneToMany(mappedBy = "retailer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
