@@ -37,12 +37,12 @@ public class RetailerServiceTest {
     void setUp() {
 
         List<Shop> shops = List.of(new Shop("murugan Ideal Store", "Solai Alagupuram"));
-        retailer = new Retailer("Murugan", "Madurai-11", "muru@gmail.com", "9159340475", shops);
+        retailer = new Retailer("Murugan", "Madurai-11", "muru@gmail.com", "151341111", shops);
         retailer.setId(1L);
         retailer.getShops().forEach( shop -> { shop.setId(1L); shop.setRetailer(retailer); }  );
 
         List<Shop> shops2 = List.of(new Shop("sanjana Ideal Store", "Solai Alagupuram"));
-        retailer2 = new Retailer("Sanjana", "Madurai-11", "sanj@gmail.com", "9159340476", shops2);
+        retailer2 = new Retailer("Sanjana", "Madurai-11", "sanj@gmail.com", "151341112", shops2);
         retailer2.setId(2L);
         retailer.getShops().forEach( shop -> { shop.setId(2L); shop.setRetailer(retailer2); }  );
 

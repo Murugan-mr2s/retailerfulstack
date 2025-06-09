@@ -42,10 +42,10 @@ public class RetailerControllerTest {
     void setUp() {
 
         List<Shop> shops = List.of(new Shop("murugan Ideal Store", "Solai Alagupuram"));
-        retailer = new RetailerRecord("Murugan", "Madurai-11", "muru@gmail.com", "9159340475", shops);
+        retailer = new RetailerRecord("Murugan", "Madurai-11", "muru@gmail.com", "0151341111", shops);
 
         List<Shop> shops2 = List.of(new Shop("sanjana Ideal Store", "Solai Alagupuram"));
-        retailer2 = new RetailerRecord("Sanjana", "Madurai-11", "sanj@gmail.com", "9159340476", shops2);
+        retailer2 = new RetailerRecord("Sanjana", "Madurai-11", "sanj@gmail.com", "0151341112", shops2);
 
     }
 
