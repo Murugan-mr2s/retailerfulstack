@@ -15,7 +15,7 @@ public interface RetailerMapper {
 
     public static  RetailerRecord toRetailerRecord(Retailer retailer) {
 
-        return new RetailerRecord( retailer.getOwerName(),
+        return new RetailerRecord( retailer.getOwnerName(),
                 retailer.getAddress(),
                 retailer.getEmail(),
                 retailer.getPhone(),

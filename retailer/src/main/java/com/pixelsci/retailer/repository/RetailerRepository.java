@@ -11,13 +11,17 @@ import java.util.Optional;
 @Repository
 public interface RetailerRepository  extends JpaRepository<Retailer,Long> {
 
-    @Query(value = "SELECT * from retailers where email=:email" ,nativeQuery = false)
+    @Query(value = "SELECT id,owner_name,address, email, phone,shops from retailer where email=:email" ,nativeQuery = true)
     Optional<Retailer>  findByEmail(@Param("email") String email);
 
-    @Query(value = "SELECT * from retailers where phone=:phone" ,nativeQuery = false)
+    @Query(value = "SELECT id,owner_name,address, email, phone,shops from retailer where phone=:phone" ,nativeQuery = true)
     Optional<Retailer>  findByPhone(@Param("phone") String phone);
 
-    @Query(value = "SELECT * from retailers where email=:email or phone=:phone" ,nativeQuery = false)
+    @Query(value = """
+                    SELECT id,owner_name,address, email, phone,shops\s
+                        from retailer\s
+                    where email=:email or phone=:phone
+           \s""" ,nativeQuery = true)
     Optional<Retailer>  findByEmailOrPhone(@Param("email") String email, @Param("phone") String phone);
 
 }

@@ -26,19 +26,21 @@ public record RetailerController(  RetailerService retailerService ) {
     }
 
     @PostMapping
-    public  ResponseEntity<RetailerRecord> addRetailer(RetailerRecord retailer) {
+    public  ResponseEntity<RetailerRecord> addRetailer(@RequestBody RetailerRecord retailer) {
+        System.out.println(retailer);
+
         RetailerRecord  retailerRecord = retailerService.createRetailer(retailer);
         return ResponseEntity.ofNullable(retailerRecord);
     }
 
     @PutMapping
-    public ResponseEntity<RetailerRecord> updateRetailer(RetailerRecord retailer) {
+    public ResponseEntity<RetailerRecord> updateRetailer(@RequestBody RetailerRecord retailer) {
         RetailerRecord  retailerRecord=retailerService.updateRetailer(retailer);
         return ResponseEntity.ofNullable(retailerRecord);
     }
 
     @DeleteMapping
-    public void deleteMapping(RetailerRecord retailer) {
+    public void deleteMapping(@RequestBody RetailerRecord retailer) {
         retailerService.deleteRetailer(retailer);
     }
 

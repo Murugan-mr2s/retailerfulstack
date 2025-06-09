@@ -2,10 +2,15 @@ package com.pixelsci.retailer.service;
 
 import com.pixelsci.retailer.dto.RetailerMapper;
 import com.pixelsci.retailer.dto.RetailerRecord;
+import com.pixelsci.retailer.exception.NoRetailerFoundException;
 import com.pixelsci.retailer.model.Retailer;
+import com.pixelsci.retailer.model.Shop;
 import com.pixelsci.retailer.repository.RetailerRepository;
+import jakarta.annotation.Nonnull;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -13,7 +18,7 @@ public record RetailerService(RetailerRepository retailerRepository) {
 
     public List<RetailerRecord> getAllRetailers() {
 
-        Pageable request= PageRequest.of(0,10,Sort.by("owerName").ascending());
+        Pageable request= PageRequest.of(0,10,Sort.by("ownerName").ascending());
         Page<Retailer> retailers= retailerRepository.findAll(request);
         return retailers.stream().map(RetailerMapper::toRetailerRecord).toList();
 
@@ -25,7 +30,7 @@ public record RetailerService(RetailerRepository retailerRepository) {
     public RetailerRecord getRetailer(Long id) {
         return retailerRepository.findById(id)
                 .map(RetailerMapper::toRetailerRecord)
-                .orElseThrow(() -> new IllegalStateException("not found"));
+                .orElseThrow(() -> new NoRetailerFoundException("not found"));
     }
 
    /*
@@ -52,21 +57,21 @@ public record RetailerService(RetailerRepository retailerRepository) {
     }*/
 
     public RetailerRecord createRetailer(RetailerRecord retailerRecord) {
-        Retailer tempRetailer = new Retailer();
-        tempRetailer.setEmail(retailerRecord.email());
-        tempRetailer.setPhone(retailerRecord.phone());
+        Retailer tempRetailer = new Retailer(retailerRecord.email(),retailerRecord.phone());
 
         boolean exists = retailerRepository.exists(Example.of(tempRetailer, ExampleMatcher.matchingAny()));
         if (exists) {
-            throw new IllegalStateException("Retailer already found");
+            throw new NoRetailerFoundException("Retailer already found");
         }
 
-        Retailer retailer= retailerRepository.save(RetailerMapper.toRetailer(retailerRecord));
-        return RetailerMapper.toRetailerRecord(retailer);
+        Retailer retailer = RetailerMapper.toRetailer(retailerRecord);
+        retailerRecord.shops().stream().forEach( shop -> shop.setRetailer(retailer) );
+        Retailer retailerdb= retailerRepository.save(retailer);
+        return RetailerMapper.toRetailerRecord(retailerdb);
     }
 
 
-    public RetailerRecord updateRetailer(RetailerRecord retailerRecord) {
+    public RetailerRecord updateRetailer( RetailerRecord retailerRecord) {
 
         /*
         retailerRepository.findByEmailOrPhone(retailerRecord.email(),
@@ -83,10 +88,10 @@ public record RetailerService(RetailerRepository retailerRepository) {
         Retailer retailer= retailerRepository.findByEmailOrPhone(
                retailerRecord.email(),
                 retailerRecord.phone())
-               .orElseThrow( ()-> new IllegalStateException("Retailer not found"));
+               .orElseThrow( ()-> new NoRetailerFoundException("Retailer not found"));
 
 
-        retailer.setPhone(retailerRecord.phone());
+        retailer.setPhone (retailerRecord.phone());
         retailer.setEmail(retailerRecord.email());
         retailer.setAddress(retailerRecord.address());
         Retailer savedretailer=  retailerRepository.save(retailer);
@@ -101,7 +106,7 @@ public record RetailerService(RetailerRepository retailerRepository) {
                         retailerRepository.deleteById(item.getId());
                      } ,
                 ()-> {
-                    throw new IllegalStateException("Retailer not found");
+                    throw new NoRetailerFoundException("Retailer not found");
                 } );
     }
 }
